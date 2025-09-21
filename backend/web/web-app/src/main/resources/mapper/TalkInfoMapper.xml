@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.WHY.lease.web.app.mapper.TalkInfoMapper">
+    <resultMap id="TalkInfoVoMap" type="com.WHY.lease.web.app.vo.message.ContentInfoVo" autoMapping="true">
+        <id column="id" property="id"/>
+        <association property="userInfo" javaType="com.WHY.lease.model.entity.UserInfo"
+                     autoMapping="true">
+            <id column="send_user_id" property="id"/>
+        </association>
+        <collection property="graphVoList" ofType="com.WHY.lease.web.app.vo.graph.GraphVo"
+                    select="selectGraphVoListByRoomId" column="id"/>
+    </resultMap>
+    <resultMap id="TalkInfoVoMap2" type="com.WHY.lease.web.app.vo.message.ContentInfoVo" autoMapping="true">
+        <id column="id" property="id"/>
+        <association property="userInfo" javaType="com.WHY.lease.model.entity.UserInfo"
+                     autoMapping="true">
+            <id column="send_user_id" property="id"/>
+        </association>
+        <collection property="graphVoList" ofType="com.WHY.lease.web.app.vo.graph.GraphVo"
+                    select="selectGraphVoListByRoomId" column="id"/>
+    </resultMap>
+    <select id="getRead" resultMap="TalkInfoVoMap">
+        select talk_info.id, talk_info.mid, talk_info.talk,  talk_info.status, talk_info.user_id, user_info.id, user_info.phone, user_info.password, user_info.avatar_url, user_info.nickname, user_info.status,send_user_id,message
+        from talk_info join user_info on send_user_id=user_info.id join message_info on talk_info.mid=message_info.id  where talk_info.is_deleted=0 and talk_info.user_id=#{id} and talk_info.send_user_id!=#{id} and talk_info.status=1
+    </select>
+
+    <select id="selectGraphVoListByRoomId" resultType="com.WHY.lease.web.app.vo.graph.GraphVo">
+        select id,
+               name,
+               item_type,
+               item_id,
+               url
+        from graph_info
+        where is_deleted = 0
+          and item_type = 4
+          and item_id = #{id}
+    </select>
+    <select id="getRead2" resultMap="TalkInfoVoMap2">
+        select talk_info.id, talk_info.mid, talk_info.talk,  talk_info.status, talk_info.user_id, user_info.id, user_info.phone, user_info.password, user_info.avatar_url, user_info.nickname, user_info.status,send_user_id
+        from talk_info join user_info on send_user_id=user_info.id join room_info on talk_info.mid=room_info.id  where talk_info.is_deleted=0 and talk_info.user_id=#{userId} and talk_info.send_user_id!=#{userId} and talk_info.status=3
+    </select>
+</mapper>

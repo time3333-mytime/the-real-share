@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.WHY.lease.web.app.mapper.FriendsInfoMapper">
+    <delete id="reject">
+        delete from friends_info where first_id=#{userId} and second_id=#{firstId} and is_deleted=0 and status=0
+    </delete>
+    <select id="pageItemFriends" resultType="com.WHY.lease.web.app.vo.infomation.NowUserInfoVo">
+        SELECT DISTINCT
+            (SELECT COUNT(m.id)
+             FROM information_vo m
+             WHERE m.status = 0
+               AND m.from_id = CASE
+                                   WHEN fi.first_id = #{id} THEN fi.second_id
+                                   ELSE fi.first_id
+                 END
+            ) AS count,
+            ui.id AS id,
+            ui.avatar_url AS avatarUrl,
+            ui.nickname AS nickname
+        FROM
+            user_info ui
+                JOIN
+            friends_info fi ON (ui.id = fi.first_id OR ui.id = fi.second_id)
+                AND fi.status = 1
+        WHERE
+            ui.is_deleted = 0 AND ui.id!= #{id}
+          AND (fi.first_id = #{id} OR fi.second_id = #{id})
+    </select>
+    <select id="pageItemgetFriends" resultType="com.WHY.lease.web.app.vo.user.NewUserInfoVo">
+        select id AS id,
+               nickname AS nickname,
+               avatar_url  AS avatarUrl
+             from user_info where status=1 and is_deleted=0 and user_info.id in(select friends_info.second_id from friends_info where friends_info.status=0 and first_id=#{userId})
+    </select>
+    <select id="pass">
+        UPDATE friends_info
+        SET status = 1
+        WHERE second_id =#{Id} and first_id=#{id} and is_deleted=0;
+
+    </select>
+    <select id="getFriendsId" resultType="java.lang.Long">
+        select  id from user_info
+        where is_deleted=0 and user_info.id in (SELECT CASE
+                                                           WHEN first_id = #{id} THEN second_id
+                                                           ELSE first_id
+                                                           END AS other_id
+                                                FROM friends_info
+                                                WHERE (first_id = #{id}
+                                                    OR second_id = #{id}) and friends_info.status=1)
+    </select>
+
+
+</mapper>

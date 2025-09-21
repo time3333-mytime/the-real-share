@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.WHY.lease.web.app.mapper.MessageInfoMapper">
+    <resultMap id="MessageItemVoMap" type="com.WHY.lease.web.app.vo.message.MessageOutVo" autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="create_time" property="sendTime"/>
+        <association property="userInfo" javaType="com.WHY.lease.model.entity.UserInfo"
+                     autoMapping="true">
+            <id column="id" property="id"/>
+
+        </association>
+        <collection property="graphVoList" ofType="com.WHY.lease.web.app.vo.graph.GraphVo"
+                    select="selectGraphVoListByRoomId" column="id"/>
+    </resultMap>
+
+    <select id="pageItem" resultMap="MessageItemVoMap">
+        select message_info.id,message_info.subject, message_info.message, message_info.user_id,  user_info.id, user_info.phone, user_info.password, user_info.avatar_url, user_info.nickname, user_info.status,message_info.create_time
+        from message_info left join user_info on user_id=user_info.id
+                                    where message_info.is_deleted=0 order by create_time desc
+    </select>
+
+    <select id="selectGraphVoListByRoomId" resultType="com.WHY.lease.web.app.vo.graph.GraphVo">
+        select id,
+               name,
+               item_type,
+               item_id,
+               url
+        from graph_info
+        where is_deleted = 0
+          and item_type = 3
+          and item_id = #{id}
+    </select>
+    <select id="pageItemByUserId" resultMap="MessageItemVoMap">
+        select message_info.id, message_info.message,message_info.subject, message_info.user_id,  user_info.id, user_info.phone, user_info.password, user_info.avatar_url, user_info.nickname, user_info.status
+        from message_info left join user_info on user_id=user_info.id
+        where message_info.is_deleted=0 and user_id=#{id}
+    </select>
+    <select id="pageItem2" resultMap="MessageItemVoMap">
+        select message_info.id,message_info.subject, message_info.message, message_info.user_id,  user_info.id, user_info.phone, user_info.password, user_info.avatar_url, user_info.nickname, user_info.status,message_info.create_time
+        from message_info left join user_info on user_id=user_info.id
+        where message_info.is_deleted=0 AND message_info.message like CONCAT('%', #{keyword}, '%') order by create_time desc
+    </select>
+
+</mapper>

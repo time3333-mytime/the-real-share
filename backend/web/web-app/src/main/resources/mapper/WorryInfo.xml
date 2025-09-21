@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.WHY.lease.web.app.mapper.WorryMapper">
+    <resultMap id="WorryItemVoMap" type="com.WHY.lease.web.app.vo.message.WorryInfoVo" autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="create_time" property="sendTime"/>
+        <association property="userInfo" javaType="com.WHY.lease.model.entity.UserInfo"
+                     autoMapping="true">
+            <id column="id" property="id"/>
+
+        </association>
+        <collection property="graphVoList" ofType="com.WHY.lease.web.app.vo.graph.GraphVo"
+                    select="selectGraphVoListByRoomId" column="id"/>
+    </resultMap>
+
+    <select id="pageItem" resultMap="WorryItemVoMap">
+        select worry_info.*,  user_info.id, user_info.phone, user_info.password, user_info.avatar_url, user_info.nickname, user_info.status,worry_info.create_time
+        from worry_info left join user_info on user_id=user_info.id left join room_info on subject=room_info.id where room_info.landlord_id=#{userId}
+        And worry_info.is_deleted=0 order by worry_info.create_time desc
+    </select>
+    <select id="selectGraphVoListByRoomId" resultType="com.WHY.lease.web.app.vo.graph.GraphVo">
+        select id,
+               name,
+               item_type,
+               item_id,
+               url
+        from graph_info
+        where is_deleted = 0
+          and item_type = 5
+          and item_id = #{id}
+    </select>
+</mapper>
