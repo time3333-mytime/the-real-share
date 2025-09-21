@@ -54,7 +54,9 @@ export function saveOrUpdateWorry(params: Partial<MessageInterface>) {
 export function saveOrUpdatepinglun(params: Partial<TalkInterface>) {
   return http.post(`/app/message/saveContent`, params);
 }
-
+export function saveOrUpdatepinglun2(params: Partial<TalkInterface>) {
+  return http.post(`/app/message/saveContent2`, params);
+}
 export function getMyNotReadNumber() {
   return http.post<AppointmentItemInterface[]>(`/app/message/getNotRead`);
 }
