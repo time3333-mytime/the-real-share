@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.WHY.lease.web.app.mapper.InformationMapper">
+
+    <select id="meRead" resultType="com.WHY.lease.web.app.vo.infomation.InformationVo">
+        select id, from_id, to_id, text, status from information_vo where is_deleted=0 and((from_id=#{userId} and to_id=#{userid})or(from_id=#{userid} and to_id=#{userId}))
+    </select>
+</mapper>

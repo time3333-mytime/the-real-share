@@ -1,0 +1,71 @@
+server:
+  port: 8081
+spring:
+  mail:
+      # 163邮箱的地址为smtp.163.com，直接填写即可
+    host: smtp.163.com
+      # 你申请的163邮箱 如果无基础或者不想多事 那就用163
+    username:
+    # 注意密码是在开启smtp/pop3时自动生成的，记得保存一下，不然就找不到了
+    password:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://localhost:3306/lease?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2b8
+    username: root
+    password: 123456
+    hikari:
+      connection-test-query: SELECT 1 # 自动检测连接
+      connection-timeout: 60000 #数据库连接超时时间,默认30秒
+      idle-timeout: 500000 #空闲连接存活最大时间，默认600000（10分钟）
+      max-lifetime: 540000 #此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      maximum-pool-size: 12 #连接池最大连接数，默认是10
+      minimum-idle: 10 #最小空闲连接数量
+      pool-name: SPHHikariPool # 连接池名称
+  jackson:
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-file-size: 10MB #单个最大文件大小
+      max-request-size: 10MB #总上传的最大数据大小
+  data:
+    redis:
+      host: 192.168.235.128
+      port: 6379
+      database: 0
+
+#用于打印框架生成的sql语句，便于调试
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+springdoc:
+  default-flat-param-object: true
+
+aliyun:
+  sms:
+    access-key-id:
+    access-key-secret:
+    endpoint:
+
+minio:
+  endpoint: http://192.168.235.128:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: talking
+
+alipay:
+    openApiDomain: https://openapi-sandbox.dl.alipaydev.com/gateway.do
+    mcloudApiDomain: http://mcloudmonitor.com/gateway.do
+    appId: 2021000147684705
+    pid: 2088721064503543
+    # RSA私钥、公钥和支付宝公钥
+    #此处请填写你的应用私钥且转PKCS8格式
+    privateKey: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCG4boZN6dDLeYby/RRPGyJjstCUJorwRELIGFqa6lPbaCvdAEkvANu2p6W6JAmO55Bx89BdymTom58uEJB24x/RdTmppnBkM5t/R4vLN7hgfcB0m7aU9ZVRax4ovrAscMCyu2ihrZhohe9Df80jxRwZWlAeyVhECn+BcVhD6Tq3vsouejq9gKMKoLEd8eWOiRA4xvgLqdkh5GgP1G5yRkV8go6UtBM8pZIEA9sbt1a9XydBy2OXnO3f3gsuDTlCi+C0CX0C79Ly3uNTJK6zwPsiGSvSHFrv39WyeiVp7tU5xaLOEhWVRTvp9Qb/K0W7IOwwvphkMWbiwUMR/Fg9luZAgMBAAECggEAUhKsMIgCyQf2ytcx1PSVfqZa3AE7roAOJN0RKbZVEbW9XsWRpI6a8Csq8NyWSg1g4Nn6LPWbYPAnltBv0K8NMKyHPcoGKRg55AdvBHmjLUjtyjgHp+X3t29r4QQa3IHODbb5HjomZAZDt4/6yDp/z1yFzOyh9Avn4WAVmFfym88nJxTciu63Tx66hHPm5rDOXjXD6d4PyPf4EM0PEuyHHtmPrTSmvlF2K+bmArqB6EYyG6uIEUImJAgXWs/jp36mhpNog83R3uxEmlj7M9lqBboFzA14sB4UCHY90fBPvBVWR0trmf7+8mqwIqrlH0HWOr8XZcRGcP/2KLeN5EKkOQKBgQDnPOpktvKGz4yai95MEQ9dHhTNFhRRbfhdbA1a6cQ+o25Xu63WQv94alhdYl/8chFrMGT/Z+kzXA2H7p7eA6E341nunrV9hzNwE3IxVRwaoJez078vFyNRvyiQXFjBgalYRP7z9axAjotCrH0r7voa0VjNRIWvzDx0+gn4f7uqhwKBgQCVU1UpYVp63WHSehBQJUyJvtOVeK1VZD7z2V0eCUwIh/OTBWBgnhYqF9IbLnq/xE+8G+c31rZtRHYkCvPfKMfs8hhURyJ6ibZwK2iQb0KVE8gLjYsAHyFLJQNoh0ellbwXUppS3cX0opSwD6JghJaPxYkNsMXUVbEYjBMfvsCw3wKBgGCoywYMn3aQ3aJgoyzC2NxAzcso1pdvU6mhmDePjjPs1xwfXLw6x1WLhqKKk7sP544Z7a4Bvq50ZUeUDJ6bf9G/3IDtoMn3MR5BUrOicxwCU0edVMaXcnEiag9mOsewrpwyQyyxXi6iJz5Yof4yaCO7rNYpNYTV59OyDWbt5gGTAoGAVFDKfGQRH+ETFDKCNY7qCbkrZXHPhbDl7vCkKIqdWQ/S1AgsJEH/R+NNarWy78ccMp4az6e4ODh48N8SVsaDJOKKJERKTqCl1+5ay3tXQC/8O7G/c+Ef/ns20nXYWcITg6PLqdC5rumCRWt+hzs2fJXQTl+rRLriFXc6cSlXSkcCgYAsLsIO340HewLTGuiwZDm7Y42F9S1f0DAzOC/AG/wVetODjSWsVIdi4h0hN5ACBaa7oIHg8jq5se6UclixKnCccWgCDeTG1X5ncO1ipw6ADueRCQv/wHBmvIIKY+R6APOTWsqQPrO8MAr+ZYsIw3+kZzpKvcgIY1QDgKVy8W50oQ==
+  #此处请填写你的应用公钥
+    publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhuG6GTenQy3mG8v0UTxsiY7LQlCaK8ERCyBhamupT22gr3QBJLwDbtqeluiQJjueQcfPQXcpk6JufLhCQduMf0XU5qaZwZDObf0eLyze4YH3AdJu2lPWVUWseKL6wLHDAsrtooa2YaIXvQ3/NI8UcGVpQHslYRAp/gXFYQ+k6t77KLno6vYCjCqCxHfHljokQOMb4C6nZIeRoD9RuckZFfIKOlLQTPKWSBAPbG7dWvV8nQctjl5zt394LLg05QovgtAl9Au/S8t7jUySus8D7Ihkr0hxa79/Vsnolae7VOcWizhIVlUU76fUG/ytFuyDsML6YZDFm4sFDEfxYPZbmQIDAQAB
+  #SHA256withRsa对应支付宝公钥
+    alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoZ8vjkDcmEJ9AvO01IE4IrI3tiVF8M/9NGwFKIIKStW9tkpEPy00RBI35ZACLeu3dv+7u/mNoE1Snl+zVxlCho80rYHr1+fO/Mk8QesPFahFTgLnKYFmY6p9Pp/L65Ruq4f64M3VmIfo41ZUFW9orAdlugxjUmIezlrEnIQ7WZz6svwPwnnY/2XLcqDl75E452FEz5Uz1vTLzIcR7yxlqHNqv3jhV3/vO4CdDytCvDq4YGUPN56Od0prhFHd+SxdNfg5fwD1Ce3SB/dADHIhW3op4Vq/r3+UDozdozU2EJMtJGUHZfRUeGCbWs3wlGQv7m0v8uSwiaQT0OGec4wAXwIDAQAB
+  # 签名类型: RSA->SHA1withRsa,RSA2->SHA256withRsa
+    signType: RSA2
+    #异步通知url(注意拦截器是否拦截)
+    notifyUrl: http://8u862c.natappfree.cc/NBOSTA_WSBM/Alipay/ZFBcallbackAction.do

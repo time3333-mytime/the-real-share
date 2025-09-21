@@ -1,0 +1,40 @@
+package com.WHY.lease.web.app.service.impl;
+
+import com.WHY.lease.common.minio.MinioProperties;
+import com.WHY.lease.web.app.service.FileService;
+import io.minio.*;
+import io.minio.errors.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
+@Service
+public class FileServiceImpl implements FileService {
+    @Autowired
+    private MinioProperties minioProperties;
+
+    @Autowired
+    MinioClient minioClient;
+    @Override
+    public String upload(MultipartFile file) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+
+            boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioProperties.getBucketName()).build());
+            if(!bucketExists){
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(minioProperties.getBucketName()).build());
+                minioClient.setBucketPolicy(SetBucketPolicyArgs.builder().bucket(minioProperties.getBucketName()).build());
+            }
+            String filename = new SimpleDateFormat("yyyyMMdd").format(new Date()) + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+
+            minioClient.putObject(PutObjectArgs.builder().bucket(minioProperties.getBucketName()).stream(file.getInputStream(),file.getSize(),-1).object(filename).contentType(file.getContentType()).build());
+            String url=minioProperties.getEndpoint()+"/"+minioProperties.getBucketName()+"/"+filename;
+            return url;
+    }
+
+}
