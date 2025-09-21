@@ -46,8 +46,11 @@ export function saveOrUpdatetiezi(params: Partial<MessageInterface>) {
 export function saveOrUpdateWorry(params: Partial<MessageInterface>) {
   return http.post(`/app/message/worry`, params);
 }
-export function saveOrUpdatepinglun(params: Partial<TalkInterface>) {
+export function saveOrUpdatepinglun2(params: Partial<TalkInterface>) {
   return http.post(`/app/message/saveContent2`, params);
+}
+export function saveOrUpdatepinglun(params: Partial<TalkInterface>) {
+  return http.post(`/app/message/saveContent`, params);
 }
 export function getSearch(search: string) {
   return http.get<PageRes<MessageInterface>>(

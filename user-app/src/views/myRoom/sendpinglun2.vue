@@ -45,7 +45,7 @@ import {
   type UploadProps
 } from "element-plus";
 import { useUserStore } from "@/store/modules/user";
-import { saveOrUpdatepinglun, saveOrUpdatetiezi } from "@/api/message";
+import { saveOrUpdatepinglun, saveOrUpdatepinglun2, saveOrUpdatetiezi } from "@/api/message";
 import type { MessageInterface, TalkInterface } from "@/api/message/types";
 import { useRoute, useRouter } from "vue-router";
 import router from "@/router";
@@ -94,7 +94,7 @@ async function submitHandle() {
 }
 async function saveOrUpdateHandle() {
   try {
-    await saveOrUpdatepinglun(form.value);
+    await saveOrUpdatepinglun2(form.value);
   } catch (error) {
     console.log(error);
   }
