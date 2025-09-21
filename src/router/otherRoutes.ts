@@ -158,6 +158,15 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    name: "sendpinglun2",
+    path: "/sendpinglun2",
+    component: () => import("@/views/myRoom/sendpinglun2.vue"),
+    meta: {
+      title: "房间发送评论",
+      noCache: true
+    }
+  },
+  {
     name: "Appointment",
     path: "/appointment",
     component: () => import("@/views/appointment/appointment.vue"),
